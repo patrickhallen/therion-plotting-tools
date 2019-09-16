@@ -21,7 +21,7 @@
 from argparse import ArgumentParser
 import sqlite3
 
-from plots import rose
+from plots import rose, shot_lengths_histogram
 
 
 if __name__ == "__main__":
@@ -38,6 +38,14 @@ if __name__ == "__main__":
     parser_rose.add_argument("-b", "--bins", nargs=1, default=72, type=int,
             help="Number of bins")
     parser_rose.set_defaults(function=rose.plot)
+
+    parser_shot_lengths_histogram = subparsers.add_parser("shot-lengths",
+            help="Create a histogram of shot lengths")
+    parser_shot_lengths_histogram.add_argument("-b", "--bins", nargs=1, default=100, type=int,
+            help="Number of bins")
+    parser_shot_lengths_histogram.add_argument("-l", "--log", action="store_true",
+            help="Use log scale")
+    parser_shot_lengths_histogram.set_defaults(function=shot_lengths_histogram.plot)
 
     args = parser.parse_args()
 
