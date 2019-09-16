@@ -20,25 +20,27 @@
 
 from argparse import ArgumentParser
 import sqlite3
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as  plt
+
+from plots import rose
 
 
 if __name__ == "__main__":
 
-    parser = ArgumentParser("Plot rosen diagram from a Therion DB")
+    parser = ArgumentParser(description="Create plots from a Therion sqlite database")
     parser.add_argument("input", help="Input sqlite database exported by Therion")
+    parser.add_argument("-s", "--save", metavar="PATH", nargs=1,
+            help="Save the plots into the given directory")
+    parser.add_argument("-f", "--format", choices=["png", "jpg", "pdf", "svg"],
+            default="png", help="File format of plots")
+    subparsers = parser.add_subparsers(help="Available plots")
+
+    parser_rose = subparsers.add_parser("rose", help="Create a rose diagram")
+    parser_rose.add_argument("-b", "--bins", nargs=1, default=72, type=int,
+            help="Number of bins")
+    parser_rose.set_defaults(function=rose.plot)
+
     args = parser.parse_args()
 
     conn = sqlite3.connect(args.input)
-    df = pd.read_sql_query("select * from SHOT;", conn)
 
-    bins = 72
-    h, e = np.histogram(df["BEARING"] * np.pi/180., weights=df["LENGTH"], bins=bins)
-
-    ax = plt.subplot(111, projection="polar")
-    ax.set_theta_zero_location("N")
-    ax.set_theta_direction(-1)
-    ax.bar(e[:-1], h, align="edge", width=e[1]-e[0])
-    plt.show()
+    args.function(args, conn)
