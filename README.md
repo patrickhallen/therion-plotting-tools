@@ -18,3 +18,20 @@ optional arguments:
   -f {png,jpg,pdf,svg}, --format {png,jpg,pdf,svg}
                         File format of plots
 ```
+
+```
+usage: plot.py input rose [-h] [-b BINS]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -b BINS, --bins BINS  Number of bins
+```
+
+```
+usage: plot.py input shot-lengths [-h] [-b BINS] [-l]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -b BINS, --bins BINS  Number of bins
+  -l, --log             Use log scale
+```
